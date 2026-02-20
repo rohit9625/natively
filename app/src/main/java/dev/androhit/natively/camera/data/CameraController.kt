@@ -43,6 +43,10 @@ class CameraController(
         )
     }
 
+    fun clearAnalyzer() {
+        controller.clearImageAnalysisAnalyzer()
+    }
+
     fun capturePhoto(
         outputFile: File,
         onResult: (Result<Uri>) -> Unit
