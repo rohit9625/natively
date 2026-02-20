@@ -1,0 +1,15 @@
+{
+  "name": "natively",
+  "version": "1.0.0",
+  "description": "Understand the world, natively",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lingo.dev": "^0.131.6"
+  }
+}

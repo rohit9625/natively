@@ -32,3 +32,8 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Node modules
+/node_modules
+.env
+i18n.cache
