@@ -1,0 +1,27 @@
+name: Translate string resources and create pull-request
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Sync default locale strings
+        run: bash scripts/sync-default-locale.sh
+
+      - name: Translate strings via Lingo.dev
+        uses: lingodotdev/lingo.dev@main
+        with:
+          api-key: ${{ secrets.LINGODOTDEV_API_KEY }}
+          pull-request: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
