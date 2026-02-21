@@ -1,4 +1,7 @@
 <resources>
     <string translatable="false" name="app_name">Natively</string>
     <string name="live">Live</string>
+    <string name="proceed">Proceed</string>
+    <string name="select_script_rationale">Select a script to improve text detection accuracy</string>
+    <string name="choose_text_script">Choose Text Script</string>
 </resources>
