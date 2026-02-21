@@ -21,7 +21,7 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
-private const val BASE_URL = "http://localhost:8000/api/v1/"
+private const val BASE_URL = "${BuildConfig.BASE_URL}/api/v1/"
 
 val networkModule = module {
     singleOf(::TranslationApi)
