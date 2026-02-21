@@ -54,6 +54,8 @@ import dev.androhit.natively.domain.RecognizedText
 import dev.androhit.natively.ui.components.CameraFeature
 import dev.androhit.natively.ui.components.SwitchFeatureBottomBar
 import dev.androhit.natively.ui.components.TranslateTextChip
+import dev.androhit.natively.ui.states.TranslationState
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.collections.forEach
 
 @Composable
@@ -61,12 +63,11 @@ fun CameraScreen(
     cameraController: CameraController,
 ) {
     val context = LocalContext.current.applicationContext
-    val viewModel = viewModel {
-        CameraViewModel(cameraController)
-    }
+    val viewModel = koinViewModel<CameraViewModel>()
     
     val selectedFeature by viewModel.selectedFeature.collectAsStateWithLifecycle()
     val detectedTextLines by viewModel.detectedTextLines.collectAsStateWithLifecycle()
+    val translationState by viewModel.translationState.collectAsStateWithLifecycle()
     
     val textAnalyzer = remember {
         TextAnalyzer(context, viewModel::onTextDetected)
@@ -85,7 +86,7 @@ fun CameraScreen(
         }
     }
 
-    var selectedTextLine by remember { mutableStateOf<RecognizedText?>(null) }
+    val selectedTextLine by viewModel.selectedTextLine.collectAsStateWithLifecycle()
 
     Scaffold { innerPadding ->
         Box(
@@ -106,7 +107,7 @@ fun CameraScreen(
                                 val tapped = detectedTextLines.lastOrNull { line ->
                                     line.boundingBox.contains(tapOffset.x.toInt(), tapOffset.y.toInt())
                                 }
-                                selectedTextLine = tapped
+                                viewModel.setSelectedTextLine(tapped)
                             }
                         }
                 ) {
@@ -133,8 +134,9 @@ fun CameraScreen(
                 selectedTextLine?.let { line ->
                     DetectedTextChipsLayer(
                         textLines = listOf(line),
+                        translationState = translationState,
                         onTranslate = {
-                            /** TODO("Translate text") **/
+                           viewModel.translateText(line.text, line.language)
                         }
                     )
                 }
@@ -183,7 +185,8 @@ fun CameraScreen(
 @Composable
 fun DetectedTextChipsLayer(
     textLines: List<RecognizedText>,
-    onTranslate: (RecognizedText) -> Unit
+    translationState: TranslationState,
+    onTranslate: (RecognizedText) -> Unit,
 ) {
     BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         val maxWidthPx = constraints.maxWidth
@@ -196,6 +199,8 @@ fun DetectedTextChipsLayer(
             TranslateTextChip(
                 text = line.text,
                 onTranslate = { onTranslate(line) },
+                isLoading = translationState.isLoading,
+                translatedText = translationState.translatedText,
                 modifier = Modifier
                     .onGloballyPositioned { coordinates ->
                         chipSize = coordinates.size
