@@ -35,7 +35,8 @@ class TextAnalyzer(
                 line.boundingBox?.let { rect ->
                     RecognizedText(
                         text = line.text,
-                        boundingBox = rect
+                        boundingBox = rect,
+                        language = line.recognizedLanguage
                     )
                 }
             }

@@ -4,5 +4,6 @@ import android.graphics.Rect
 
 data class RecognizedText(
     val text: String,
-    val boundingBox: Rect
+    val boundingBox: Rect,
+    val language: String? = null,
 )

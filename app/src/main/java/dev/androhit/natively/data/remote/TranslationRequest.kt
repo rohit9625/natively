@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TranslationRequest(
     val text: String,
-    val sourceLanguage: String,
+    val sourceLanguage: String?,
     val targetLanguage: String,
 )

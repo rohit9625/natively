@@ -15,7 +15,7 @@ class TranslationRepositoryImpl(
 ): TranslationRepository {
     override suspend fun getTranslation(
         text: String,
-        sourceLanguage: String,
+        sourceLanguage: String?,
         targetLanguage: String
     ): Result<String, DataError.Network> {
         return try {

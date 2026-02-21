@@ -6,7 +6,7 @@ import dev.androhit.natively.domain.models.Result
 interface TranslationRepository {
     suspend fun getTranslation(
         text: String,
-        sourceLanguage: String,
+        sourceLanguage: String?,
         targetLanguage: String
     ): Result<String, DataError.Network>
 }

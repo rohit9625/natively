@@ -1,7 +1,7 @@
 package dev.androhit.natively
 
 import android.app.Application
-import dev.androhit.natively.di.cameraModule
+import dev.androhit.natively.di.appModule
 import dev.androhit.natively.di.networkModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,7 +14,7 @@ class NativelyApplication: Application() {
         startKoin {
             androidLogger()
             androidContext(this@NativelyApplication)
-            modules(networkModule, cameraModule)
+            modules(appModule, networkModule)
         }
     }
 }
