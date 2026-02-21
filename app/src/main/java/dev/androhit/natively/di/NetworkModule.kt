@@ -34,8 +34,9 @@ val networkModule = module {
             }
 
             install(HttpTimeout) {
-                requestTimeoutMillis = 10000L
-                connectTimeoutMillis = 10000L
+                requestTimeoutMillis = 20000L
+                connectTimeoutMillis = 20000L
+                socketTimeoutMillis = 20000L
             }
 
             install(DefaultRequest) {
