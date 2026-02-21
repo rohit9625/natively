@@ -74,7 +74,7 @@ class CameraViewModel(
     }
 
     fun setTargetLanguage(language: Language) {
-        _translationState.update { it.copy(sourceLanguage = language) }
+        _translationState.update { it.copy(targetLanguage = language) }
     }
 
     fun setSelectedTextLine(line: RecognizedText?) {
