@@ -45,15 +45,16 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.androhit.natively.R
 import dev.androhit.natively.camera.data.CameraController
 import dev.androhit.natively.camera.ui.components.CameraPreview
 import dev.androhit.natively.data.TextAnalyzer
 import dev.androhit.natively.domain.RecognizedText
 import dev.androhit.natively.ui.components.CameraFeature
+import dev.androhit.natively.ui.components.LanguageSelectorBar
 import dev.androhit.natively.ui.components.SwitchFeatureBottomBar
 import dev.androhit.natively.ui.components.TranslateTextChip
+import dev.androhit.natively.ui.states.Language
 import dev.androhit.natively.ui.states.TranslationState
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.collections.forEach
@@ -136,7 +137,10 @@ fun CameraScreen(
                         textLines = listOf(line),
                         translationState = translationState,
                         onTranslate = {
-                           viewModel.translateText(line.text, line.language)
+                           viewModel.translateText(
+                               text = line.text,
+                               detectedSource = line.language
+                           )
                         }
                     )
                 }
@@ -172,6 +176,14 @@ fun CameraScreen(
                         )
                     }
                 }
+
+                LanguageSelectorBar(
+                    sourceLanguage = translationState.sourceLanguage,
+                    targetLanguage = translationState.targetLanguage,
+                    availableLanguages = Language.entries,
+                    onSourceLanguageSelected = { viewModel.setSourceLanguage(it) },
+                    onTargetLanguageSelected = { viewModel.setTargetLanguage(it) }
+                )
 
                 SwitchFeatureBottomBar(
                     selectedFeature = selectedFeature,

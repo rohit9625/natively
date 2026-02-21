@@ -1,18 +1,14 @@
 package dev.androhit.natively.camera.ui
 
 import androidx.camera.mlkit.vision.MlKitAnalyzer
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.androhit.natively.camera.data.CameraController
 import dev.androhit.natively.domain.RecognizedText
 import dev.androhit.natively.domain.TranslationRepository
 import dev.androhit.natively.domain.models.Result
 import dev.androhit.natively.ui.components.CameraFeature
+import dev.androhit.natively.ui.states.Language
 import dev.androhit.natively.ui.states.TranslationState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,10 +40,15 @@ class CameraViewModel(
         }
     }
 
-    fun translateText(text: String, sourceLanguage: String?) {
+    fun translateText(text: String, detectedSource: String?) {
         _translationState.update { it.copy(isLoading = true) }
+        val targetLanguage = _translationState.value.targetLanguage.code
+        val sourceLanguage = if(_translationState.value.sourceLanguage == Language.AUTO) {
+            detectedSource
+        } else _translationState.value.sourceLanguage.code
+
         viewModelScope.launch {
-            when(val result = translationRepository.getTranslation(text, sourceLanguage, targetLanguage = "hi")) {
+            when(val result = translationRepository.getTranslation(text, sourceLanguage, targetLanguage)) {
                 is Result.Error -> {
                     _translationState.update {
                         it.copy(
@@ -66,6 +67,14 @@ class CameraViewModel(
                 }
             }
         }
+    }
+
+    fun setSourceLanguage(language: Language) {
+        _translationState.update { it.copy(sourceLanguage = language) }
+    }
+
+    fun setTargetLanguage(language: Language) {
+        _translationState.update { it.copy(sourceLanguage = language) }
     }
 
     fun setSelectedTextLine(line: RecognizedText?) {
