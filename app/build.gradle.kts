@@ -37,10 +37,17 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.logging)
+
     implementation(libs.mlkit.text.recognition)
 
     implementation(libs.androidx.camera.core)
@@ -61,6 +68,7 @@ dependencies {
     implementation(libs.androidx.material3.adaptive.navigation3)
 
     implementation(libs.kotlinx.serialization.core)
+    implementation(libs.slf4j.android)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
