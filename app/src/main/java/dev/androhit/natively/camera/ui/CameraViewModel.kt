@@ -8,12 +8,15 @@ import dev.androhit.natively.data.TextAnalyzer
 import dev.androhit.natively.domain.RecognizedText
 import dev.androhit.natively.domain.TextScript
 import dev.androhit.natively.domain.TranslationRepository
+import dev.androhit.natively.domain.UserPrefRepository
 import dev.androhit.natively.domain.models.Result
 import dev.androhit.natively.ui.components.CameraFeature
 import dev.androhit.natively.ui.states.Language
 import dev.androhit.natively.ui.states.TranslationState
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -21,6 +24,7 @@ class CameraViewModel(
     private val cameraController: CameraController,
     private val translationRepository: TranslationRepository,
     private val textAnalyzer: TextAnalyzer,
+    private val userPrefRepository: UserPrefRepository,
 ): ViewModel() {
 
     private val _detectedTextLines = MutableStateFlow(emptyList<RecognizedText>())
@@ -38,12 +42,23 @@ class CameraViewModel(
     private val _capturedImage = MutableStateFlow<Bitmap?>(null)
     val capturedImage = _capturedImage.asStateFlow()
 
+    val userPreferences = userPrefRepository.userPreference
+        .stateIn(
+            scope =viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
+
     init {
         viewModelScope.launch {
             textAnalyzer.detectedTextLines.collect {
                 _detectedTextLines.value = it
             }
         }
+    }
+
+    fun updateIsFirstLaunch(firstLaunch: Boolean) {
+        viewModelScope.launch { userPrefRepository.updateIsFirstLaunch(firstLaunch) }
     }
 
     fun onFeatureSelected(feature: CameraFeature) {
