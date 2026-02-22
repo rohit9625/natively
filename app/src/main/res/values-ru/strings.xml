@@ -1,3 +1,34 @@
 <resources>
     <string name="live">В эфире</string>
+    <string name="proceed">Продолжить</string>
+    <string name="select_script_rationale">Выберите алфавит для повышения точности распознавания текста</string>
+    <string name="choose_text_script">Выберите алфавит текста</string>
+
+    <string name="languages">Языки</string>
+    <string name="latin">Латиница</string>
+    <string name="devanagari">Деванагари</string>
+    <string name="chinese">Китайский</string>
+    <string name="japanese">Японский</string>
+    <string name="korean">Корейский</string>
+    <string name="select_script_error">Пожалуйста, выберите алфавит</string>
+    <string-array name="latin_languages">
+        <item>Английский</item>
+        <item>Испанский</item>
+        <item>Французский</item>
+    </string-array>
+    <string-array name="devanagari_languages">
+        <item>Английский</item>
+        <item>Испанский</item>
+        <item>Французский</item>
+    </string-array>
+    <string-array name="chinese_languages">
+        <item>Китайский (упрощённый)</item>
+        <item>Китайский (традиционный)</item>
+    </string-array>
+    <string-array name="japanese_languages">
+        <item>@string/japanese</item>
+    </string-array>
+    <string-array name="korean_languages">
+        <item>@string/korean</item>
+    </string-array>
 </resources>
