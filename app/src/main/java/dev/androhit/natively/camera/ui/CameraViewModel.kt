@@ -1,11 +1,12 @@
 package dev.androhit.natively.camera.ui
 
 import android.graphics.Bitmap
-import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.androhit.natively.camera.data.CameraController
+import dev.androhit.natively.data.TextAnalyzer
 import dev.androhit.natively.domain.RecognizedText
+import dev.androhit.natively.domain.TextScript
 import dev.androhit.natively.domain.TranslationRepository
 import dev.androhit.natively.domain.models.Result
 import dev.androhit.natively.ui.components.CameraFeature
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class CameraViewModel(
     private val cameraController: CameraController,
     private val translationRepository: TranslationRepository,
+    private val textAnalyzer: TextAnalyzer,
 ): ViewModel() {
 
     private val _detectedTextLines = MutableStateFlow(emptyList<RecognizedText>())
@@ -35,6 +37,14 @@ class CameraViewModel(
 
     private val _capturedImage = MutableStateFlow<Bitmap?>(null)
     val capturedImage = _capturedImage.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            textAnalyzer.detectedTextLines.collect {
+                _detectedTextLines.value = it
+            }
+        }
+    }
 
     fun onFeatureSelected(feature: CameraFeature) {
         _selectedFeature.value = feature
@@ -99,18 +109,21 @@ class CameraViewModel(
         _selectedTextLine.value = line
     }
 
-    fun switchCamera() {
-        cameraController.switchCamera()
-    }
-
-    fun attachTextAnalyzer(analyzer: MlKitAnalyzer) {
-        cameraController.setAnalyzer(analyzer)
-    }
-
-    fun onTextDetected(lines: List<RecognizedText>) {
-        if (_selectedFeature.value == CameraFeature.LiveTranslate) {
-            _detectedTextLines.value = lines
+    fun analyzeCapturedImage() {
+        _capturedImage.value?.let {
+            viewModelScope.launch {
+                val lines = textAnalyzer.analyzeImage(it)
+                _detectedTextLines.value = lines
+            }
         }
+    }
+
+    fun attachTextAnalyzer() {
+        cameraController.setAnalyzer(textAnalyzer.getInstance())
+    }
+
+    fun updateScript(script: TextScript) {
+        textAnalyzer.updateRecognizer(script)
     }
 
     fun capturePhoto(onSuccess: () -> Unit) {
@@ -126,5 +139,11 @@ class CameraViewModel(
 
     fun clearCapturedImage() {
         _capturedImage.value = null
+    }
+
+    fun cleanUp() {
+        textAnalyzer.close()
+        cameraController.clearAnalyzer()
+        cameraController.detach()
     }
 }

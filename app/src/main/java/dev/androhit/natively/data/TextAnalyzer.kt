@@ -15,13 +15,17 @@ import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import dev.androhit.natively.domain.RecognizedText
 import dev.androhit.natively.domain.TextScript
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 class TextAnalyzer(
-    private val context: Context,
-    private val onTextDetected: (List<RecognizedText>) -> Unit
+    private val context: Context
 ) {
+    private val _detectedTextLines = MutableStateFlow<List<RecognizedText>>(emptyList())
+    val detectedTextLines = _detectedTextLines.asStateFlow()
+
     private val recognizers = mapOf(
         TextScript.Latin to TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS),
         TextScript.Devanagari to TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build()),
@@ -40,7 +44,8 @@ class TextAnalyzer(
             ContextCompat.getMainExecutor(context)
         ) { result ->
             val visionText = result?.getValue(recognizer) ?: return@MlKitAnalyzer
-            onTextDetected(visionText.toRecognizedText())
+            val lines = visionText.toRecognizedText()
+            _detectedTextLines.value = lines
         }
     }
 
@@ -52,6 +57,7 @@ class TextAnalyzer(
             recognizer.process(inputImage)
                 .addOnSuccessListener { visionText ->
                     val lines = visionText.toRecognizedText()
+                    _detectedTextLines.value = lines
                     continuation.resume(lines)
                 }
                 .addOnFailureListener { e ->

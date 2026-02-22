@@ -22,6 +22,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +49,17 @@ fun ViewImageScreen(
 ) {
     val capturedImage by viewModel.capturedImage.collectAsStateWithLifecycle()
     val translationState by viewModel.translationState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.analyzeCapturedImage()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.clearCapturedImage()
+            viewModel.cleanUp()
+        }
+    }
 
     val sheetState = rememberModalBottomSheetState()
     rememberCoroutineScope()
