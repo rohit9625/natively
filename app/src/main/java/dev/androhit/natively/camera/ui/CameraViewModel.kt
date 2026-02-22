@@ -1,5 +1,6 @@
 package dev.androhit.natively.camera.ui
 
+import android.graphics.Bitmap
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,8 +33,12 @@ class CameraViewModel(
     private val _translationState = MutableStateFlow(TranslationState())
     val translationState = _translationState.asStateFlow()
 
+    private val _capturedImage = MutableStateFlow<Bitmap?>(null)
+    val capturedImage = _capturedImage.asStateFlow()
+
     fun onFeatureSelected(feature: CameraFeature) {
         _selectedFeature.value = feature
+        _capturedImage.value = null
         if (feature == CameraFeature.ImageTranslate) {
             _detectedTextLines.value = emptyList()
             cameraController.clearAnalyzer()
@@ -97,6 +102,16 @@ class CameraViewModel(
     }
 
     fun capturePhoto() {
-        /** TODO("Capture photo and store it") **/
+        cameraController.capturePhoto { result ->
+            result.onSuccess { bitmap ->
+                _capturedImage.value = bitmap
+            }.onFailure {
+                it.printStackTrace()
+            }
+        }
+    }
+
+    fun clearCapturedImage() {
+        _capturedImage.value = null
     }
 }

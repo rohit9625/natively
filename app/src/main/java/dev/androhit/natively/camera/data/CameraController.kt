@@ -1,17 +1,18 @@
 package dev.androhit.natively.camera.data
 
 import android.content.Context
-import android.net.Uri
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.mlkit.vision.MlKitAnalyzer
 import androidx.camera.view.CameraController.IMAGE_ANALYSIS
 import androidx.camera.view.CameraController.IMAGE_CAPTURE
 import androidx.camera.view.LifecycleCameraController
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
-import java.io.File
 
 class CameraController(
     private val context: Context
@@ -48,17 +49,26 @@ class CameraController(
     }
 
     fun capturePhoto(
-        outputFile: File,
-        onResult: (Result<Uri>) -> Unit
+        onResult: (Result<Bitmap>) -> Unit
     ) {
-        val options = ImageCapture.OutputFileOptions.Builder(outputFile).build()
-
         controller.takePicture(
-            options,
             ContextCompat.getMainExecutor(context),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(result: ImageCapture.OutputFileResults) {
-                    onResult(Result.success(result.savedUri!!))
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    super.onCaptureSuccess(image)
+                    val matrix = Matrix().apply {
+                        postRotate(image.imageInfo.rotationDegrees.toFloat())
+                    }
+                    val rotatedBitmap = Bitmap.createBitmap(
+                        image.toBitmap(),
+                        0,
+                        0,
+                        image.width,
+                        image.height,
+                        matrix,
+                        true
+                    )
+                    onResult(Result.success(rotatedBitmap))
                 }
 
                 override fun onError(exception: ImageCaptureException) {
