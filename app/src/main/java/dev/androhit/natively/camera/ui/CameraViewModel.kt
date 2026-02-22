@@ -46,7 +46,7 @@ class CameraViewModel(
     }
 
     fun translateText(text: String, detectedSource: String?) {
-        _translationState.update { it.copy(isLoading = true) }
+        _translationState.update { it.copy(isLoading = true, translatedText = null, error = null) }
         val targetLanguage = _translationState.value.targetLanguage.code
         val sourceLanguage = if(_translationState.value.sourceLanguage == Language.AUTO) {
             detectedSource
@@ -72,6 +72,18 @@ class CameraViewModel(
                 }
             }
         }
+    }
+
+    fun translateAllText() {
+        _translationState.update { it.copy(isLoading = true) }
+        val allText = _detectedTextLines.value.joinToString("\n") { it.text }
+        if (allText.isBlank()) {
+            _translationState.update { it.copy(error = "No text detected to translate", isLoading = false) }
+            return
+        }
+        
+        val detectedSource = _detectedTextLines.value.firstOrNull()?.language
+        translateText(allText, detectedSource)
     }
 
     fun setSourceLanguage(language: Language) {
