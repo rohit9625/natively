@@ -17,9 +17,9 @@
         <item>Français</item>
     </string-array>
     <string-array name="devanagari_languages">
-        <item>Anglais</item>
-        <item>Espagnol</item>
-        <item>Français</item>
+        <item>Hindi</item>
+        <item>Marathi</item>
+        <item>Népalais</item>
     </string-array>
     <string-array name="chinese_languages">
         <item>Chinois simplifié</item>

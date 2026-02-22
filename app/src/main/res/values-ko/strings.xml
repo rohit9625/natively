@@ -17,9 +17,9 @@
         <item>프랑스어</item>
     </string-array>
     <string-array name="devanagari_languages">
-        <item>영어</item>
-        <item>스페인어</item>
-        <item>프랑스어</item>
+        <item>힌디어</item>
+        <item>마라티어</item>
+        <item>네팔어</item>
     </string-array>
     <string-array name="chinese_languages">
         <item>중국어 간체</item>
