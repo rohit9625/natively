@@ -4,4 +4,32 @@
     <string name="proceed">Proceed</string>
     <string name="select_script_rationale">Select a script to improve text detection accuracy</string>
     <string name="choose_text_script">Choose Text Script</string>
+
+    <string name="languages">Languages</string>
+    <string name="latin">Latin</string>
+    <string name="devanagari">Devanagari</string>
+    <string name="chinese">Chinese</string>
+    <string name="japanese">Japanese</string>
+    <string name="korean">Korean</string>
+    <string name="select_script_error">Please select a script</string>
+    <string-array name="latin_languages">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+    </string-array>
+    <string-array name="devanagari_languages">
+        <item>English</item>
+        <item>Spanish</item>
+        <item>French</item>
+    </string-array>
+    <string-array name="chinese_languages">
+        <item>Chinese Simplified</item>
+        <item>Chinese Traditional</item>
+    </string-array>
+    <string-array name="japanese_languages">
+        <item>@string/japanese</item>
+    </string-array>
+    <string-array name="korean_languages">
+        <item>@string/korean</item>
+    </string-array>
 </resources>

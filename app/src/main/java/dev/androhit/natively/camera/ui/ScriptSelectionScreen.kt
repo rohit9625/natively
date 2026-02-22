@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,17 +38,60 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.androhit.natively.R
+import dev.androhit.natively.domain.TextScript
 import dev.androhit.natively.ui.theme.NativelyTheme
 
-enum class TextScript(
-    val displayName: String,
-    val examples: List<String>
-) {
-    Latin("Latin", listOf("English", "Spanish", "French", "German")),
-    Devanagari("Devanagari", listOf("Hindi", "Marathi", "Nepali", "Sanskrit")),
-    Chinese("Chinese", listOf("Chinese Simplified", "Traditional")),
-    Japanese("Japanese", listOf("Japanese")),
-    Korean("Korean", listOf("Korean"))
+data class ScriptUiState(
+    val script: TextScript,
+    val nameRes: Int,
+    val languagesRes: Int,
+    val symbolRes: Int,
+)
+
+fun TextScript.toUiState(
+    name: Int,
+    languages: Int,
+    symbol: Int,
+) = ScriptUiState(
+    script = this,
+    nameRes = name,
+    languagesRes = languages,
+    symbolRes = symbol
+)
+
+
+val scripts = TextScript.entries.map {
+    when(it) {
+        TextScript.Latin -> it.toUiState(
+            name = R.string.latin,
+            symbol = R.drawable.ic_latin_symbol,
+            languages = R.array.latin_languages
+        )
+
+        TextScript.Devanagari -> it.toUiState(
+            name = R.string.devanagari,
+            symbol = R.drawable.ic_devanagari_symbol,
+            languages = R.array.devanagari_languages
+        )
+
+        TextScript.Chinese -> it.toUiState(
+            name = R.string.chinese,
+            symbol = R.drawable.ic_chinese_symbol,
+            languages = R.array.chinese_languages
+        )
+
+        TextScript.Japanese -> it.toUiState(
+            name = R.string.japanese,
+            symbol = R.drawable.ic_japanese_symbol,
+            languages = R.array.japanese_languages
+        )
+
+        TextScript.Korean -> it.toUiState(
+            name = R.string.korean,
+            symbol = R.drawable.ic_korean_symbol,
+            languages = R.array.korean_languages
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +100,7 @@ fun ScriptSelectionScreen(
     onProceed: (TextScript) -> Unit,
 ) {
     var selectedScript by remember { mutableStateOf<TextScript?>(null) }
-    var error by remember { mutableStateOf<String?>(null) }
+    var error by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
         topBar = {
@@ -89,20 +133,20 @@ fun ScriptSelectionScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.weight(1f)
             ) {
-                items(TextScript.entries) { script ->
+                items(scripts) { script ->
                     ScriptItem(
                         script = script,
                         onClick = {
-                            selectedScript = script
+                            selectedScript = script.script
                             error = null
                         },
-                        isSelected = script == selectedScript
+                        isSelected = script.script == selectedScript
                     )
                 }
             }
 
             Text(
-                text = error ?: "",
+                text = error?.let { stringResource(error!!) } ?: "",
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.align(Alignment.End)
@@ -114,7 +158,7 @@ fun ScriptSelectionScreen(
                         error = null
                         onProceed(it)
                     } ?: run {
-                        error = "Please select a script"
+                        error = R.string.select_script_error
                     }
                 },
                 shape = RoundedCornerShape(12.dp),
@@ -135,18 +179,11 @@ fun ScriptSelectionScreen(
 
 @Composable
 private fun ScriptItem(
-    script: TextScript,
+    script: ScriptUiState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isSelected: Boolean = false,
 ) {
-    val symbol = when (script) {
-        TextScript.Latin -> painterResource(R.drawable.ic_latin_symbol)
-        TextScript.Chinese -> painterResource(R.drawable.ic_chinese_symbol)
-        TextScript.Devanagari -> painterResource(R.drawable.ic_devanagari_symbol)
-        TextScript.Japanese -> painterResource(R.drawable.ic_japanese_symbol)
-        TextScript.Korean -> painterResource(R.drawable.ic_korean_symbol)
-    }
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(16.dp),
@@ -169,19 +206,19 @@ private fun ScriptItem(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
-                    painter = symbol,
+                    painter = painterResource(script.symbolRes),
                     contentDescription = null,
                     modifier = Modifier.size(48.dp)
                 )
                 Text(
-                    text = script.displayName,
+                    text = stringResource(script.nameRes),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
             }
             Text(
-                text = "Languages: ${script.examples.joinToString(", ")}",
+                text = "${stringResource(R.string.languages)}: ${stringArrayResource(script.languagesRes).joinToString(", ")}",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
@@ -206,7 +243,12 @@ fun ScriptItemPreview() {
     NativelyTheme(dynamicColor = false) {
         Surface {
             ScriptItem(
-                script = TextScript.Latin,
+                script = ScriptUiState(
+                    script = TextScript.Latin,
+                    nameRes = R.string.latin,
+                    languagesRes = R.array.latin_languages,
+                    symbolRes = R.drawable.ic_latin_symbol
+                ),
                 onClick = {},
                 modifier = Modifier.padding(16.dp)
             )
