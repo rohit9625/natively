@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.androhit.natively.R
@@ -71,7 +72,7 @@ fun ViewImageScreen(
             ExtendedFloatingActionButton(
                 text = {
                     Text(
-                        text = "Translate All",
+                        text = stringResource(R.string.translate_all),
                         style = MaterialTheme.typography.titleMedium
                     )
                 },

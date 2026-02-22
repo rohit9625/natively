@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,14 +81,14 @@ fun SwitchFeatureBottomBar(
             ) {
                 FeatureItem(
                     icon = painterResource(R.drawable.ic_translate),
-                    label = "Live",
+                    label = stringResource(R.string.live),
                     isSelected = selectedFeature == CameraFeature.LiveTranslate,
                     onClick = { onFeatureSelected(CameraFeature.LiveTranslate) }
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 FeatureItem(
                     icon = painterResource(R.drawable.ic_image_translate),
-                    label = "Image",
+                    label = stringResource(R.string.photo),
                     isSelected = selectedFeature == CameraFeature.ImageTranslate,
                     onClick = { onFeatureSelected(CameraFeature.ImageTranslate) }
                 )
