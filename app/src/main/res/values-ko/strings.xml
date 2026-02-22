@@ -1,3 +1,34 @@
 <resources>
     <string name="live">라이브</string>
+    <string name="proceed">계속</string>
+    <string name="select_script_rationale">텍스트 감지 정확도를 높이기 위해 문자 체계를 선택하세요</string>
+    <string name="choose_text_script">텍스트 문자 체계 선택</string>
+
+    <string name="languages">언어</string>
+    <string name="latin">라틴 문자</string>
+    <string name="devanagari">데바나가리 문자</string>
+    <string name="chinese">중국어</string>
+    <string name="japanese">일본어</string>
+    <string name="korean">한국어</string>
+    <string name="select_script_error">문자 체계를 선택해 주세요</string>
+    <string-array name="latin_languages">
+        <item>영어</item>
+        <item>스페인어</item>
+        <item>프랑스어</item>
+    </string-array>
+    <string-array name="devanagari_languages">
+        <item>영어</item>
+        <item>스페인어</item>
+        <item>프랑스어</item>
+    </string-array>
+    <string-array name="chinese_languages">
+        <item>중국어 간체</item>
+        <item>중국어 번체</item>
+    </string-array>
+    <string-array name="japanese_languages">
+        <item>@string/japanese</item>
+    </string-array>
+    <string-array name="korean_languages">
+        <item>@string/korean</item>
+    </string-array>
 </resources>

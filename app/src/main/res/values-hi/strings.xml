@@ -1,3 +1,34 @@
 <resources>
     <string name="live">लाइव</string>
+    <string name="proceed">आगे बढ़ें</string>
+    <string name="select_script_rationale">टेक्स्ट पहचान की सटीकता बढ़ाने के लिए एक लिपि चुनें</string>
+    <string name="choose_text_script">टेक्स्ट लिपि चुनें</string>
+
+    <string name="languages">भाषाएँ</string>
+    <string name="latin">लैटिन</string>
+    <string name="devanagari">देवनागरी</string>
+    <string name="chinese">चीनी</string>
+    <string name="japanese">जापानी</string>
+    <string name="korean">कोरियाई</string>
+    <string name="select_script_error">कृपया एक लिपि चुनें</string>
+    <string-array name="latin_languages">
+        <item>अंग्रेज़ी</item>
+        <item>स्पेनिश</item>
+        <item>फ्रेंच</item>
+    </string-array>
+    <string-array name="devanagari_languages">
+        <item>अंग्रेज़ी</item>
+        <item>स्पेनिश</item>
+        <item>फ्रेंच</item>
+    </string-array>
+    <string-array name="chinese_languages">
+        <item>सरलीकृत चीनी</item>
+        <item>पारंपरिक चीनी</item>
+    </string-array>
+    <string-array name="japanese_languages">
+        <item>@string/japanese</item>
+    </string-array>
+    <string-array name="korean_languages">
+        <item>@string/korean</item>
+    </string-array>
 </resources>
