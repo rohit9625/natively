@@ -11,6 +11,8 @@
     <string name="japanese">जापानी</string>
     <string name="korean">कोरियाई</string>
     <string name="select_script_error">कृपया एक लिपि चुनें</string>
+    <string name="translate_all">सभी का अनुवाद करें</string>
+    <string name="photo">फ़ोटो</string>
     <string-array name="latin_languages">
         <item>अंग्रेज़ी</item>
         <item>स्पेनिश</item>

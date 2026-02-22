@@ -11,6 +11,8 @@
     <string name="japanese">日文</string>
     <string name="korean">韩文</string>
     <string name="select_script_error">请选择一种文字脚本</string>
+    <string name="translate_all">全部翻译</string>
+    <string name="photo">照片</string>
     <string-array name="latin_languages">
         <item>English</item>
         <item>Spanish</item>

@@ -11,6 +11,8 @@
     <string name="japanese">Japonês</string>
     <string name="korean">Coreano</string>
     <string name="select_script_error">Por favor, selecione um script</string>
+    <string name="translate_all">Traduzir tudo</string>
+    <string name="photo">Fotografia</string>
     <string-array name="latin_languages">
         <item>Inglês</item>
         <item>Espanhol</item>

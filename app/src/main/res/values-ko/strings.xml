@@ -11,6 +11,8 @@
     <string name="japanese">일본어</string>
     <string name="korean">한국어</string>
     <string name="select_script_error">문자 체계를 선택해 주세요</string>
+    <string name="translate_all">모두 번역</string>
+    <string name="photo">사진</string>
     <string-array name="latin_languages">
         <item>영어</item>
         <item>스페인어</item>

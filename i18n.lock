@@ -12,6 +12,8 @@ checksums:
     japanese: 577fd83e8e392bc3b56df14d10463fff
     korean: 99d3a279a51280e063545941b380f6a8
     select_script_error: a911dbd9967dcd70a6fc843a6f6acb51
+    translate_all: acbac0125ad36ef1c503beb25355272a
+    photo: ca2fb1919818af32ddea8972024f5acb
     latin_languages/0: e1eeeb379f86a015d6e581fcbc4af7f3
     latin_languages/1: 881640609abd94ca50cbafb21f085042
     latin_languages/2: b6c77a4e718a978af58895b27731413c
