@@ -1,3 +1,34 @@
 <resources>
     <string name="live">ライブ</string>
+    <string name="proceed">続ける</string>
+    <string name="select_script_rationale">テキスト検出精度を向上させるために文字体系を選択してください</string>
+    <string name="choose_text_script">文字体系を選択</string>
+
+    <string name="languages">言語</string>
+    <string name="latin">ラテン文字</string>
+    <string name="devanagari">デーヴァナーガリー文字</string>
+    <string name="chinese">中国語</string>
+    <string name="japanese">日本語</string>
+    <string name="korean">韓国語</string>
+    <string name="select_script_error">文字体系を選択してください</string>
+    <string-array name="latin_languages">
+        <item>英語</item>
+        <item>スペイン語</item>
+        <item>フランス語</item>
+    </string-array>
+    <string-array name="devanagari_languages">
+        <item>英語</item>
+        <item>スペイン語</item>
+        <item>フランス語</item>
+    </string-array>
+    <string-array name="chinese_languages">
+        <item>簡体字中国語</item>
+        <item>繁体字中国語</item>
+    </string-array>
+    <string-array name="japanese_languages">
+        <item>@string/japanese</item>
+    </string-array>
+    <string-array name="korean_languages">
+        <item>@string/korean</item>
+    </string-array>
 </resources>

@@ -1,3 +1,34 @@
 <resources>
     <string name="live">Live</string>
+    <string name="proceed">Procedi</string>
+    <string name="select_script_rationale">Seleziona uno script per migliorare la precisione del rilevamento del testo</string>
+    <string name="choose_text_script">Scegli lo script del testo</string>
+
+    <string name="languages">Lingue</string>
+    <string name="latin">Latino</string>
+    <string name="devanagari">Devanagari</string>
+    <string name="chinese">Cinese</string>
+    <string name="japanese">Giapponese</string>
+    <string name="korean">Coreano</string>
+    <string name="select_script_error">Seleziona uno script</string>
+    <string-array name="latin_languages">
+        <item>Inglese</item>
+        <item>Spagnolo</item>
+        <item>Francese</item>
+    </string-array>
+    <string-array name="devanagari_languages">
+        <item>Inglese</item>
+        <item>Spagnolo</item>
+        <item>Francese</item>
+    </string-array>
+    <string-array name="chinese_languages">
+        <item>Cinese semplificato</item>
+        <item>Cinese tradizionale</item>
+    </string-array>
+    <string-array name="japanese_languages">
+        <item>@string/japanese</item>
+    </string-array>
+    <string-array name="korean_languages">
+        <item>@string/korean</item>
+    </string-array>
 </resources>
