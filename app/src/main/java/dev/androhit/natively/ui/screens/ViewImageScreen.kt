@@ -51,6 +51,7 @@ fun ViewImageScreen(
     val translationState by viewModel.translationState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.attachTextAnalyzer()
         viewModel.analyzeCapturedImage()
     }
 
@@ -81,7 +82,9 @@ fun ViewImageScreen(
                     )
                 },
                 onClick = {
-                    viewModel.translateAllText()
+                    if(translationState.translatedText == null) {
+                        viewModel.translateAllText()
+                    }
                     showBottomSheet = true
                 },
                 shape = CircleShape

@@ -86,7 +86,7 @@ class CameraViewModel(
 
     fun translateAllText() {
         _translationState.update { it.copy(isLoading = true) }
-        val allText = _detectedTextLines.value.joinToString("\n") { it.text }
+        val allText = _detectedTextLines.value.joinToString(" ") { it.text }
         if (allText.isBlank()) {
             _translationState.update { it.copy(error = "No text detected to translate", isLoading = false) }
             return
@@ -142,8 +142,19 @@ class CameraViewModel(
     }
 
     fun cleanUp() {
-        textAnalyzer.close()
+        _translationState.update {
+            it.copy(
+                isLoading = false,
+                translatedText = null,
+                error = null
+            )
+        }
         cameraController.clearAnalyzer()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        textAnalyzer.close()
         cameraController.detach()
     }
 }
