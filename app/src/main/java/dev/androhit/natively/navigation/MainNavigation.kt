@@ -9,9 +9,11 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dev.androhit.natively.camera.data.CameraController
 import dev.androhit.natively.camera.ui.CameraScreen
+import dev.androhit.natively.camera.ui.CameraViewModel
 import dev.androhit.natively.camera.ui.ScriptSelectionScreen
-import dev.androhit.natively.camera.ui.scripts
+import dev.androhit.natively.ui.screens.ViewImageScreen
 import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainNavigation(modifier: Modifier = Modifier) {
@@ -25,12 +27,26 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
+            val viewModel = koinViewModel<CameraViewModel>()
             entry<Route.Camera> {
                 val cameraController = koinInject<CameraController>()
 
                 CameraScreen(
                     cameraController = cameraController,
-                    script = it.script
+                    viewModel = viewModel,
+                    script = it.script,
+                    onViewImage = {
+                        mainBackStack.add(Route.ViewImage)
+                    }
+                )
+            }
+
+            entry<Route.ViewImage> {
+                ViewImageScreen(
+                    viewModel = viewModel,
+                    onNavigateBack = {
+                        mainBackStack.removeLastOrNull()
+                    }
                 )
             }
 

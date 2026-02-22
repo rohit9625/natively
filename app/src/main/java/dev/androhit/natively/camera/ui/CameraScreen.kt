@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -48,7 +47,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.androhit.natively.R
 import dev.androhit.natively.camera.data.CameraController
 import dev.androhit.natively.camera.ui.components.CameraPreview
-import dev.androhit.natively.data.TextAnalyzer
 import dev.androhit.natively.domain.RecognizedText
 import dev.androhit.natively.domain.TextScript
 import dev.androhit.natively.ui.components.CameraFeature
@@ -57,35 +55,28 @@ import dev.androhit.natively.ui.components.SwitchFeatureBottomBar
 import dev.androhit.natively.ui.components.TranslateTextChip
 import dev.androhit.natively.ui.states.Language
 import dev.androhit.natively.ui.states.TranslationState
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CameraScreen(
     cameraController: CameraController,
+    viewModel: CameraViewModel,
+    onViewImage: () -> Unit = {},
     script: TextScript? = null,
 ) {
-    val context = LocalContext.current.applicationContext
-    val viewModel = koinViewModel<CameraViewModel>()
-    
     val selectedFeature by viewModel.selectedFeature.collectAsStateWithLifecycle()
     val detectedTextLines by viewModel.detectedTextLines.collectAsStateWithLifecycle()
     val translationState by viewModel.translationState.collectAsStateWithLifecycle()
-    
-    val textAnalyzer = remember {
-        TextAnalyzer(context, viewModel::onTextDetected)
-    }
 
     LaunchedEffect(selectedFeature, script) {
         if (selectedFeature == CameraFeature.LiveTranslate) {
-            script?.let { textAnalyzer.updateRecognizer(script) }
-            viewModel.attachTextAnalyzer(textAnalyzer.getInstance())
+            script?.let { viewModel.updateScript(script) }
+            viewModel.attachTextAnalyzer()
         }
     }
 
     DisposableEffect(Unit) {
         onDispose {
-            cameraController.detach()
-            textAnalyzer.close()
+            viewModel.cleanUp()
         }
     }
 
@@ -161,7 +152,7 @@ fun CameraScreen(
                     exit = fadeOut() + scaleOut()
                 ) {
                     IconButton(
-                        onClick = { viewModel.capturePhoto() },
+                        onClick = { viewModel.capturePhoto(onViewImage) },
                         modifier = Modifier
                             .size(72.dp)
                             .background(Color.White.copy(alpha = 0.2f), CircleShape)

@@ -1,10 +1,12 @@
 package dev.androhit.natively.camera.ui
 
-import androidx.camera.mlkit.vision.MlKitAnalyzer
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.androhit.natively.camera.data.CameraController
+import dev.androhit.natively.data.TextAnalyzer
 import dev.androhit.natively.domain.RecognizedText
+import dev.androhit.natively.domain.TextScript
 import dev.androhit.natively.domain.TranslationRepository
 import dev.androhit.natively.domain.models.Result
 import dev.androhit.natively.ui.components.CameraFeature
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 class CameraViewModel(
     private val cameraController: CameraController,
     private val translationRepository: TranslationRepository,
+    private val textAnalyzer: TextAnalyzer,
 ): ViewModel() {
 
     private val _detectedTextLines = MutableStateFlow(emptyList<RecognizedText>())
@@ -32,8 +35,20 @@ class CameraViewModel(
     private val _translationState = MutableStateFlow(TranslationState())
     val translationState = _translationState.asStateFlow()
 
+    private val _capturedImage = MutableStateFlow<Bitmap?>(null)
+    val capturedImage = _capturedImage.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            textAnalyzer.detectedTextLines.collect {
+                _detectedTextLines.value = it
+            }
+        }
+    }
+
     fun onFeatureSelected(feature: CameraFeature) {
         _selectedFeature.value = feature
+        _capturedImage.value = null
         if (feature == CameraFeature.ImageTranslate) {
             _detectedTextLines.value = emptyList()
             cameraController.clearAnalyzer()
@@ -41,7 +56,7 @@ class CameraViewModel(
     }
 
     fun translateText(text: String, detectedSource: String?) {
-        _translationState.update { it.copy(isLoading = true) }
+        _translationState.update { it.copy(isLoading = true, translatedText = null, error = null) }
         val targetLanguage = _translationState.value.targetLanguage.code
         val sourceLanguage = if(_translationState.value.sourceLanguage == Language.AUTO) {
             detectedSource
@@ -69,6 +84,18 @@ class CameraViewModel(
         }
     }
 
+    fun translateAllText() {
+        _translationState.update { it.copy(isLoading = true) }
+        val allText = _detectedTextLines.value.joinToString(" ") { it.text }
+        if (allText.isBlank()) {
+            _translationState.update { it.copy(error = "No text detected to translate", isLoading = false) }
+            return
+        }
+        
+        val detectedSource = _detectedTextLines.value.firstOrNull()?.language
+        translateText(allText, detectedSource)
+    }
+
     fun setSourceLanguage(language: Language) {
         _translationState.update { it.copy(sourceLanguage = language) }
     }
@@ -82,21 +109,52 @@ class CameraViewModel(
         _selectedTextLine.value = line
     }
 
-    fun switchCamera() {
-        cameraController.switchCamera()
-    }
-
-    fun attachTextAnalyzer(analyzer: MlKitAnalyzer) {
-        cameraController.setAnalyzer(analyzer)
-    }
-
-    fun onTextDetected(lines: List<RecognizedText>) {
-        if (_selectedFeature.value == CameraFeature.LiveTranslate) {
-            _detectedTextLines.value = lines
+    fun analyzeCapturedImage() {
+        _capturedImage.value?.let {
+            viewModelScope.launch {
+                val lines = textAnalyzer.analyzeImage(it)
+                _detectedTextLines.value = lines
+            }
         }
     }
 
-    fun capturePhoto() {
-        /** TODO("Capture photo and store it") **/
+    fun attachTextAnalyzer() {
+        cameraController.setAnalyzer(textAnalyzer.getInstance())
+    }
+
+    fun updateScript(script: TextScript) {
+        textAnalyzer.updateRecognizer(script)
+    }
+
+    fun capturePhoto(onSuccess: () -> Unit) {
+        cameraController.capturePhoto { result ->
+            result.onSuccess { bitmap ->
+                _capturedImage.value = bitmap
+                onSuccess()
+            }.onFailure {
+                it.printStackTrace()
+            }
+        }
+    }
+
+    fun clearCapturedImage() {
+        _capturedImage.value = null
+    }
+
+    fun cleanUp() {
+        _translationState.update {
+            it.copy(
+                isLoading = false,
+                translatedText = null,
+                error = null
+            )
+        }
+        cameraController.clearAnalyzer()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        textAnalyzer.close()
+        cameraController.detach()
     }
 }
