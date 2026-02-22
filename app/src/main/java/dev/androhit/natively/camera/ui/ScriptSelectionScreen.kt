@@ -1,12 +1,27 @@
 package dev.androhit.natively.camera.ui
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +56,7 @@ fun ScriptSelectionScreen(
     onProceed: (TextScript) -> Unit,
 ) {
     var selectedScript by remember { mutableStateOf<TextScript?>(null) }
+    var error by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
@@ -63,7 +79,7 @@ fun ScriptSelectionScreen(
         ) {
             Text(
                 text = stringResource(R.string.select_script_rationale),
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
             )
 
@@ -76,16 +92,34 @@ fun ScriptSelectionScreen(
                 items(TextScript.entries) { script ->
                     ScriptItem(
                         script = script,
-                        onClick = { selectedScript = script },
+                        onClick = {
+                            selectedScript = script
+                            error = null
+                        },
                         isSelected = script == selectedScript
                     )
                 }
             }
 
+            Text(
+                text = error ?: "",
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.align(Alignment.End)
+            )
+
             Button(
-                onClick = { selectedScript?.let { onProceed(it) } },
+                onClick = {
+                    selectedScript?.let {
+                        error = null
+                        onProceed(it)
+                    } ?: run {
+                        error = "Please select a script"
+                    }
+                },
                 shape = RoundedCornerShape(12.dp),
                 contentPadding = PaddingValues(vertical = 12.dp, horizontal = 24.dp),
+                enabled = error == null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
@@ -122,12 +156,12 @@ private fun ScriptItem(
             contentColor = if(isSelected) MaterialTheme.colorScheme.onPrimaryContainer
                 else MaterialTheme.colorScheme.onSurfaceVariant
         ),
+        onClick = onClick,
         modifier = modifier
-            .aspectRatio(1f)
-            .clickable(onClick = onClick),
     ) {
         Column(
             modifier = Modifier
+                .aspectRatio(1f)
                 .fillMaxSize()
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
