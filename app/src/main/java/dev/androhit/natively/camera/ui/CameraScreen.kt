@@ -45,22 +45,22 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.androhit.natively.R
 import dev.androhit.natively.camera.data.CameraController
 import dev.androhit.natively.camera.ui.components.CameraPreview
 import dev.androhit.natively.data.TextAnalyzer
 import dev.androhit.natively.domain.RecognizedText
+import dev.androhit.natively.domain.TextScript
 import dev.androhit.natively.ui.components.CameraFeature
 import dev.androhit.natively.ui.components.SwitchFeatureBottomBar
 import dev.androhit.natively.ui.components.TranslateTextChip
 import dev.androhit.natively.ui.states.TranslationState
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.collections.forEach
 
 @Composable
 fun CameraScreen(
     cameraController: CameraController,
+    script: TextScript? = null,
 ) {
     val context = LocalContext.current.applicationContext
     val viewModel = koinViewModel<CameraViewModel>()
@@ -73,8 +73,9 @@ fun CameraScreen(
         TextAnalyzer(context, viewModel::onTextDetected)
     }
 
-    LaunchedEffect(selectedFeature) {
+    LaunchedEffect(selectedFeature, script) {
         if (selectedFeature == CameraFeature.LiveTranslate) {
+            script?.let { textAnalyzer.updateRecognizer(script) }
             viewModel.attachTextAnalyzer(textAnalyzer.getInstance())
         }
     }

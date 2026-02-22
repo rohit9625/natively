@@ -10,6 +10,7 @@ import androidx.navigation3.ui.NavDisplay
 import dev.androhit.natively.camera.data.CameraController
 import dev.androhit.natively.camera.ui.CameraScreen
 import dev.androhit.natively.camera.ui.ScriptSelectionScreen
+import dev.androhit.natively.camera.ui.scripts
 import org.koin.compose.koinInject
 
 @Composable
@@ -28,13 +29,14 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                 val cameraController = koinInject<CameraController>()
 
                 CameraScreen(
-                    cameraController = cameraController
+                    cameraController = cameraController,
+                    script = it.script
                 )
             }
 
             entry<Route.SelectScript> {
                 ScriptSelectionScreen {
-                    mainBackStack.add(Route.Camera)
+                    mainBackStack.add(Route.Camera(it))
                 }
             }
         }
