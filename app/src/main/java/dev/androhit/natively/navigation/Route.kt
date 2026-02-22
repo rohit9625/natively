@@ -1,5 +1,6 @@
 package dev.androhit.natively.navigation
 
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.navigation3.runtime.NavKey
 import dev.androhit.natively.domain.TextScript
 import kotlinx.serialization.Serializable
@@ -11,4 +12,7 @@ sealed interface Route: NavKey {
 
     @Serializable
     data class Camera(val script: TextScript? = null) : Route, NavKey
+
+    @Serializable
+    data object ViewImage : Route, NavKey
 }

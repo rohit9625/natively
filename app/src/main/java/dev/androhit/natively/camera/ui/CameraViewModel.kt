@@ -101,10 +101,11 @@ class CameraViewModel(
         }
     }
 
-    fun capturePhoto() {
+    fun capturePhoto(onSuccess: () -> Unit) {
         cameraController.capturePhoto { result ->
             result.onSuccess { bitmap ->
                 _capturedImage.value = bitmap
+                onSuccess()
             }.onFailure {
                 it.printStackTrace()
             }

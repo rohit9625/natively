@@ -57,20 +57,20 @@ import dev.androhit.natively.ui.components.SwitchFeatureBottomBar
 import dev.androhit.natively.ui.components.TranslateTextChip
 import dev.androhit.natively.ui.states.Language
 import dev.androhit.natively.ui.states.TranslationState
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CameraScreen(
     cameraController: CameraController,
+    viewModel: CameraViewModel,
+    onViewImage: () -> Unit = {},
     script: TextScript? = null,
 ) {
     val context = LocalContext.current.applicationContext
-    val viewModel = koinViewModel<CameraViewModel>()
     
     val selectedFeature by viewModel.selectedFeature.collectAsStateWithLifecycle()
     val detectedTextLines by viewModel.detectedTextLines.collectAsStateWithLifecycle()
     val translationState by viewModel.translationState.collectAsStateWithLifecycle()
-    
+
     val textAnalyzer = remember {
         TextAnalyzer(context, viewModel::onTextDetected)
     }
@@ -161,7 +161,7 @@ fun CameraScreen(
                     exit = fadeOut() + scaleOut()
                 ) {
                     IconButton(
-                        onClick = { viewModel.capturePhoto() },
+                        onClick = { viewModel.capturePhoto(onViewImage) },
                         modifier = Modifier
                             .size(72.dp)
                             .background(Color.White.copy(alpha = 0.2f), CircleShape)
