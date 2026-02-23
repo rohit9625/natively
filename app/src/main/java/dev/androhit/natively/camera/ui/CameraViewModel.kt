@@ -61,6 +61,10 @@ class CameraViewModel(
         viewModelScope.launch { userPrefRepository.updateIsFirstLaunch(firstLaunch) }
     }
 
+    fun updatePreferredScript(script: TextScript) {
+        viewModelScope.launch { userPrefRepository.updatePreferredScript(script) }
+    }
+
     fun onFeatureSelected(feature: CameraFeature) {
         _selectedFeature.value = feature
         _capturedImage.value = null

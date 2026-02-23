@@ -97,9 +97,11 @@ val scripts = TextScript.entries.map {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScriptSelectionScreen(
+    isFirstLaunch: Boolean,
+    script: TextScript,
     onProceed: (TextScript) -> Unit,
 ) {
-    var selectedScript by remember { mutableStateOf<TextScript?>(null) }
+    var selectedScript by remember { mutableStateOf(script) }
     var error by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
@@ -169,7 +171,10 @@ fun ScriptSelectionScreen(
                     .padding(bottom = 8.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.proceed),
+                    text = stringResource(
+                        if (isFirstLaunch) R.string.proceed
+                        else R.string.update_script
+                    ),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
@@ -233,7 +238,11 @@ private fun ScriptItem(
 @Composable
 fun ScriptSelectionScreenPreview() {
     NativelyTheme(dynamicColor = false) {
-        ScriptSelectionScreen(onProceed = {})
+        ScriptSelectionScreen(
+            isFirstLaunch = false,
+            script = TextScript.Latin,
+            onProceed = {}
+        )
     }
 }
 

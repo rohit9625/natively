@@ -59,10 +59,15 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             }
 
             entry<Route.SelectScript> {
-                ScriptSelectionScreen {
-                    viewModel.updateIsFirstLaunch(false)
-                    mainBackStack.add(Route.Camera(it))
-                }
+                ScriptSelectionScreen(
+                    isFirstLaunch = userPres?.isFirstLaunch ?: true,
+                    script = userPres?.preferredScript ?: TextScript.Latin,
+                    onProceed = {
+                        viewModel.updatePreferredScript(it)
+                        viewModel.updateIsFirstLaunch(false)
+                        mainBackStack.add(Route.Camera(it))
+                    }
+                )
             }
         }
     )
