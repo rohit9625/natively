@@ -61,6 +61,10 @@ class CameraViewModel(
         viewModelScope.launch { userPrefRepository.updateIsFirstLaunch(firstLaunch) }
     }
 
+    fun updatePreferredScript(script: TextScript) {
+        viewModelScope.launch { userPrefRepository.updatePreferredScript(script) }
+    }
+
     fun onFeatureSelected(feature: CameraFeature) {
         _selectedFeature.value = feature
         _capturedImage.value = null
@@ -127,7 +131,8 @@ class CameraViewModel(
     fun analyzeCapturedImage() {
         _capturedImage.value?.let {
             viewModelScope.launch {
-                val lines = textAnalyzer.analyzeImage(it)
+                val script = userPreferences.value?.preferredScript ?: TextScript.Latin
+                val lines = textAnalyzer.analyzeImage(it, script)
                 _detectedTextLines.value = lines
             }
         }

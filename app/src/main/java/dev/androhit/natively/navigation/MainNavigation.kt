@@ -25,7 +25,7 @@ fun MainNavigation(modifier: Modifier = Modifier) {
 
     val mainBackStack = rememberNavBackStack(
         if(userPres?.isFirstLaunch ?: false) Route.SelectScript
-        else Route.Camera(userPres?.preferredScript ?: TextScript.Latin)
+        else Route.Camera
     )
 
     NavDisplay(
@@ -42,9 +42,11 @@ fun MainNavigation(modifier: Modifier = Modifier) {
                 CameraScreen(
                     cameraController = cameraController,
                     viewModel = viewModel,
-                    script = it.script,
                     onViewImage = {
                         mainBackStack.add(Route.ViewImage)
+                    },
+                    onChangeScript = {
+                        mainBackStack.add(Route.SelectScript)
                     }
                 )
             }
@@ -59,10 +61,15 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             }
 
             entry<Route.SelectScript> {
-                ScriptSelectionScreen {
-                    viewModel.updateIsFirstLaunch(false)
-                    mainBackStack.add(Route.Camera(it))
-                }
+                ScriptSelectionScreen(
+                    isFirstLaunch = userPres?.isFirstLaunch ?: true,
+                    script = userPres?.preferredScript ?: TextScript.Latin,
+                    onProceed = {
+                        viewModel.updatePreferredScript(it)
+                        viewModel.updateIsFirstLaunch(false)
+                        mainBackStack.add(Route.Camera)
+                    }
+                )
             }
         }
     )

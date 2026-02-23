@@ -4,7 +4,7 @@
     <string name="proceed">Proceed</string>
     <string name="select_script_rationale">Select a script to improve text detection accuracy</string>
     <string name="choose_text_script">Choose Text Script</string>
-
+    <string name="update_script">Update Script</string>
     <string name="languages">Languages</string>
     <string name="latin">Latin</string>
     <string name="devanagari">Devanagari</string>
