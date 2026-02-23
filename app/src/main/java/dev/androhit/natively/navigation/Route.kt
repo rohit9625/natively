@@ -11,7 +11,7 @@ sealed interface Route: NavKey {
     data object SelectScript: Route, NavKey
 
     @Serializable
-    data class Camera(val script: TextScript? = null) : Route, NavKey
+    data object Camera : Route, NavKey
 
     @Serializable
     data object ViewImage : Route, NavKey

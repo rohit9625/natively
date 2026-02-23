@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -61,15 +62,16 @@ fun CameraScreen(
     cameraController: CameraController,
     viewModel: CameraViewModel,
     onViewImage: () -> Unit = {},
-    script: TextScript? = null,
+    onChangeScript: () -> Unit = {},
 ) {
     val selectedFeature by viewModel.selectedFeature.collectAsStateWithLifecycle()
     val detectedTextLines by viewModel.detectedTextLines.collectAsStateWithLifecycle()
     val translationState by viewModel.translationState.collectAsStateWithLifecycle()
+    val userPrefs by viewModel.userPreferences.collectAsStateWithLifecycle()
 
-    LaunchedEffect(selectedFeature, script) {
+    LaunchedEffect(selectedFeature, userPrefs?.preferredScript) {
         if (selectedFeature == CameraFeature.LiveTranslate) {
-            script?.let { viewModel.updateScript(script) }
+            userPrefs?.preferredScript?.let { viewModel.updateScript(it) }
             viewModel.attachTextAnalyzer()
         }
     }
@@ -139,6 +141,13 @@ fun CameraScreen(
                 }
             }
 
+            ChangeScriptButton(
+                script = userPrefs?.preferredScript ?: TextScript.Latin,
+                onClick = onChangeScript,
+                modifier = Modifier.align(Alignment.TopStart)
+                    .padding(16.dp)
+            )
+
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -183,6 +192,37 @@ fun CameraScreen(
                     onFeatureSelected = viewModel::onFeatureSelected
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun ChangeScriptButton(
+    script: TextScript,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val symbol = when(script) {
+        TextScript.Latin -> R.drawable.ic_latin_symbol
+        TextScript.Devanagari -> R.drawable.ic_devanagari_symbol
+        TextScript.Chinese -> R.drawable.ic_chinese_symbol
+        TextScript.Japanese -> R.drawable.ic_japanese_symbol
+        TextScript.Korean -> R.drawable.ic_korean_symbol
+    }
+    Surface(
+        modifier = modifier.widthIn(max = 272.dp),
+        shape = CircleShape,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
+        tonalElevation = 6.dp,
+        shadowElevation = 12.dp
+    ) {
+        IconButton(
+            onClick = onClick,
+        ) {
+            Icon(
+                painter = painterResource(symbol),
+                contentDescription = "Change Script",
+            )
         }
     }
 }
