@@ -131,7 +131,8 @@ class CameraViewModel(
     fun analyzeCapturedImage() {
         _capturedImage.value?.let {
             viewModelScope.launch {
-                val lines = textAnalyzer.analyzeImage(it)
+                val script = userPreferences.value?.preferredScript ?: TextScript.Latin
+                val lines = textAnalyzer.analyzeImage(it, script)
                 _detectedTextLines.value = lines
             }
         }
