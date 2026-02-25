@@ -12,12 +12,14 @@ checksums:
     japanese: 577fd83e8e392bc3b56df14d10463fff
     korean: 99d3a279a51280e063545941b380f6a8
     select_script_error: a911dbd9967dcd70a6fc843a6f6acb51
+    translate_all: acbac0125ad36ef1c503beb25355272a
+    photo: ca2fb1919818af32ddea8972024f5acb
     latin_languages/0: e1eeeb379f86a015d6e581fcbc4af7f3
     latin_languages/1: 881640609abd94ca50cbafb21f085042
     latin_languages/2: b6c77a4e718a978af58895b27731413c
-    devanagari_languages/0: e1eeeb379f86a015d6e581fcbc4af7f3
-    devanagari_languages/1: 881640609abd94ca50cbafb21f085042
-    devanagari_languages/2: b6c77a4e718a978af58895b27731413c
+    devanagari_languages/0: 83ef511fe3291eb3eeb7404470003c4b
+    devanagari_languages/1: df755dc0dd9273599fc36f338d2a3978
+    devanagari_languages/2: e737c3ab56113e310277eabaf8c54715
     chinese_languages/0: 8e4eaafb989481bc8fdc5453f72f584d
     chinese_languages/1: cf50d7bf9663647890c444c11a9d8a4d
     japanese_languages/0: 838252e89de7d8d222fc1664a84e0c45
