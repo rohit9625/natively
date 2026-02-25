@@ -11,17 +11,15 @@
     <string name="japanese">Giapponese</string>
     <string name="korean">Coreano</string>
     <string name="select_script_error">Seleziona uno script</string>
-    <string name="translate_all">Traduci tutto</string>
-    <string name="photo">Foto</string>
     <string-array name="latin_languages">
         <item>Inglese</item>
         <item>Spagnolo</item>
         <item>Francese</item>
     </string-array>
     <string-array name="devanagari_languages">
-        <item>Hindi</item>
-        <item>Marathi</item>
-        <item>Nepalese</item>
+        <item>Inglese</item>
+        <item>Spagnolo</item>
+        <item>Francese</item>
     </string-array>
     <string-array name="chinese_languages">
         <item>Cinese semplificato</item>

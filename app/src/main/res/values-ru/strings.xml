@@ -11,17 +11,15 @@
     <string name="japanese">Японский</string>
     <string name="korean">Корейский</string>
     <string name="select_script_error">Пожалуйста, выберите алфавит</string>
-    <string name="translate_all">Перевести всё</string>
-    <string name="photo">Фото</string>
     <string-array name="latin_languages">
         <item>Английский</item>
         <item>Испанский</item>
         <item>Французский</item>
     </string-array>
     <string-array name="devanagari_languages">
-        <item>Хинди</item>
-        <item>Маратхи</item>
-        <item>Непали</item>
+        <item>Английский</item>
+        <item>Испанский</item>
+        <item>Французский</item>
     </string-array>
     <string-array name="chinese_languages">
         <item>Китайский (упрощённый)</item>
