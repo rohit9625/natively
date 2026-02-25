@@ -21,7 +21,7 @@
     <string-array name="devanagari_languages">
         <item>Hindi</item>
         <item>Marathi</item>
-        <item>Nepalesisch</item>
+        <item>Nepali</item>
     </string-array>
     <string-array name="chinese_languages">
         <item>Chinesisch (vereinfacht)</item>
